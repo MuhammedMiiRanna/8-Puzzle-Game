@@ -4,6 +4,7 @@ The 8-puzzle problem is a puzzle invented and popularized by Noyes Palmer Chapma
 
 # How to Solve this game ?
 
+we solved this game using A* algorithm but what is this ?
 A\* is a graph traversal and path search algorithm, which is often used in many fields of computer science due to its completeness, optimality, and optimal efficiency. One major practical drawback is its O(b^d) space complexity, as it stores all generated nodes in memory.
 
 # Example of the algorithm
