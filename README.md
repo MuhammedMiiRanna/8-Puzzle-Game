@@ -8,7 +8,7 @@ A\* is a graph traversal and path search algorithm, which is often used in many 
 
 # Example of the algorithm
 
-![how A* work]('images/8puzzle4.png')
+![how A* work](images/8puzzle4.png)
 
 # How to play ?
 
@@ -24,4 +24,4 @@ All you have to do is run the main script to see how the algorithm solving the p
 
 # Screenshots of the game
 
-![Game Screenshot]('images/game screenshot.png')
+![Game Screenshot](images/game_screenshot.png)
