@@ -1,6 +1,5 @@
 import pygame
 from game_lib import *
-from random import random
 from game_interface import *
 from time import time, sleep
 

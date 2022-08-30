@@ -3,8 +3,17 @@ from time import time
 from copy import deepcopy
 from random import choice
 from collections import deque
+
+"""
+    game_lib library, contain the classes and methods that we need 
+    to relaise the game.
+    """
 # #################################################################
 # Game settings :
+"""
+    boolean parameters, to pause the game, indicate the end of the game, quitting game (resp).
+    indicates the computer turn, waiting time(we pass it to pyGame interface), and the color we used.
+    """
 pause, game_over, quit_game = False, False, False
 computer_turn = True
 waiting_time = 500
@@ -22,6 +31,19 @@ colors = {
 
 
 class Grid:
+    """
+    This class represent a grid of 3 by 3 (8-puzzle).
+    grid should b an 3x3 matrix of numbers(0 to 8), e.g: [[6, 5, 2], [4, 3, 1], [0, 8, 7]]
+        you can use prepare_grid() to get a grid that is ready to use(check its doc).
+
+    Raises:
+        "Length should be 9 or 3x3 (in a range of 0 to 8)..!!!": in case of the list that we passed to prepare_grid() method 
+                                                                    isn't a list of 9 items, or a matrix of 3 col, 3 rows.
+        "There should be 9 Numbers (in a range of 0 to 8)..!!!": in case of the list that we passed to prepare_grid() method 
+                                                                    isn't a list of 9 item.
+        "Unsupported Val/val_Type ,only numbers from 0 To 8 !": in case of the list that we passed to prepare_grid() method 
+                                                                    contain numbers other then 0 to 8.
+    """
     x, y = 'x', 'y'
     em = 0
     Grid_used = 0
