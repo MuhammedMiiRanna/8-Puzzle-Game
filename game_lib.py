@@ -195,7 +195,9 @@ class Grid:
 
 
 class Node:
-
+    """
+    class represent a Node, which contain the grid class and other methods.
+    """
     def __init__(self, grid, parent=None, action=None):
         self.grid = grid
         self.parent = parent
