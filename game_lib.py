@@ -5,7 +5,7 @@ from random import choice
 from collections import deque
 
 """
-    game_lib library, contain the classes and methods that we need 
+    game_lib library, contain the classes and methods that we need
     to relaise the game.
     """
 # #################################################################
@@ -37,12 +37,12 @@ class Grid:
         you can use prepare_grid() to get a grid that is ready to use(check its doc).
 
     Raises:
-        "Length should be 9 or 3x3 (in a range of 0 to 8)..!!!": in case of the list that we passed to prepare_grid() method 
+        "Length should be 9 or 3x3 (in a range of 0 to 8)..!!!": in case of the list that we passed to prepare_grid() method
                                                                     isn't a list of 9 items, or a matrix of 3 col, 3 rows.
-        "There should be 9 Numbers (in a range of 0 to 8)..!!!": in case of the list that we passed to prepare_grid() method 
+        "There should be 9 Numbers (in a range of 0 to 8)..!!!": in case of the list that we passed to prepare_grid() method
                                                                     isn't a list of 9 item.
-        "Unsupported Val/val_Type ,only numbers from 0 To 8 !": in case of the list that we passed to prepare_grid() method 
-                                                                    contain numbers other then 0 to 8.
+        "Unsupported Val/val_Type ,only numbers from 0 To 8 !": in case of the list that we passed to prepare_grid() method
+                                                                    contain numbers or strings other then the numbers from 0 to 8.
     """
     x, y = 'x', 'y'
     em = 0
@@ -52,29 +52,54 @@ class Grid:
 
     @classmethod
     def get_perfect_grid(cls):
+        """
+        classmethod that return a perfect grid.
+        e.g [[1, 2, 3], [4, 0, 5], [6, 7, 8]]
+        """
         grid = Grid(custom=np.array([[1, 2, 3], [4, Grid.em, 5], [6, 7, 8]]))
         return grid
 
     @classmethod
     def get_random_grid(cls):
+        """
+        classmethod that return a random grid(by shuffling a perfect grid many times).
+        e.g [[2, 8, 3], [1, 6, 4], [7, 0, 5]]
+        """
         grid = Grid.get_perfect_grid()
         grid = grid.shuffle()
         return grid
 
     @classmethod
     def prepare_grid(cls, instance):
+        """
+        classmethod that prepare and make sure that this grid can be used. 
+        you can pass a list of 9 numbers(0 to 8) or a normal matrix.
+        PS: call it only when you need it, do not put it into the __init__ method
+        to avoid slowing down the program(will be called unnecessarily each time we creat a class)
+        
+        Args:
+            instance (list): list of 9 numbers or a matrix of 3 by 3.
+
+        Returns:
+            instance: matrix of 3x3 numbers(from 0 to 8).
+        """
         if len(instance) == 3:
             for item in instance:
                 if len(item) > 3:
+                    # raising an Exception in case of there more then 3 numbers in each line
                     raise Exception(
                         "Length should be 9 or 3x3 (in a range of 0 to 8)..!!!")
         elif len(instance) != 9:
+                # raising an Exception in case there is more or les then 8 numbers.
             raise Exception(
                 "There should be 9 Numbers (in a range of 0 to 8)..!!!")
-
+        # reshaping the list into a matrix of 3x3.
         instance = np.array(list(instance), dtype=np.uint8).reshape(3, 3)
         for val in np.nditer(instance):
+            # chr(48) == '0' and chr(56) == '8'
             if not 48 <= ord(str(val)) <= 56:
+                # raising an Exception in case there is a number that isn't equal or in between 8 and 0
+                # or a string
                 raise Exception(
                     "Unsupported Val/val_Type ,only numbers from 0 To 8 !")
         return instance
@@ -226,6 +251,14 @@ class Node:
 
 
 def solution(node):
+    """_summary_
+
+    Args:
+        node (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     visited = set()
     queue = deque([node])
     visited.add(queue[0].state)
