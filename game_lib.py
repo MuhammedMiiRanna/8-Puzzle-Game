@@ -1,3 +1,4 @@
+from matplotlib.pyplot import grid
 import numpy as np
 from time import time
 from copy import deepcopy
@@ -76,7 +77,7 @@ class Grid:
         you can pass a list of 9 numbers(0 to 8) or a normal matrix.
         PS: call it only when you need it, do not put it into the __init__ method
         to avoid slowing down the program(will be called unnecessarily each time we creat a class)
-        
+
         Args:
             instance (list): list of 9 numbers or a matrix of 3 by 3.
 
@@ -90,7 +91,7 @@ class Grid:
                     raise Exception(
                         "Length should be 9 or 3x3 (in a range of 0 to 8)..!!!")
         elif len(instance) != 9:
-                # raising an Exception in case there is more or les then 8 numbers.
+            # raising an Exception in case there is more or les then 8 numbers.
             raise Exception(
                 "There should be 9 Numbers (in a range of 0 to 8)..!!!")
         # reshaping the list into a matrix of 3x3.
@@ -110,6 +111,11 @@ class Grid:
 
     @property
     def manhattan(self):
+        """return the manhattan distance, which is the distance between two points is the sum of the absolute differences of their Cartesian coordinates.
+
+        Returns:
+            int: manhattan distance
+        """
         # grid = np.delete(np.reshape(grid, 9), np.where(grid == em))
         distance = 0
         for i in range(3):
@@ -125,9 +131,19 @@ class Grid:
 
     @property
     def empty_coord(self):
+        """function the return the coordination of the em (Grid.em, 0 in our case).
+
+        Returns:
+            tuple: tuple that contains line and col of the em value coordinations in the grid
+        """
         return (np.where(self.grid == Grid.em)[0][0], np.where(self.grid == Grid.em)[1][0])
 
     def moving_blocks(self):
+        """returns the neighbors of the empty grid, which means the blocks that can move
+
+        Returns:
+            dictionary: dict of {direction: coord(line, col)} pairs
+        """
         empty = self.empty_coord
         block_can_move = {}
         poss_moves = {
@@ -142,6 +158,20 @@ class Grid:
         return block_can_move
 
     def make_move(self, action, to):
+        """swip between the position of the empty block and the target position (position of "to" argument).
+
+        Args:
+            action (string): the position of the block that can move relatively to the empty block
+            to (tuple): the new position of the empty block
+
+        Returns:
+            tuple(grid copy, action or direction): a copy of the new grid and the direction that the empty block went to.
+            Exp: [  [1, 3, 5], 
+                    [2, 0, 4,],
+                    [7, 8, 6]
+                ]
+                the action here is 'DOWN_' since the '0' will swip position with '8'
+        """
         copy = self.copy()
         y_empty, x_empty = copy.empty_coord
         copy.grid[y_empty][x_empty] = copy.grid[to[0]][to[1]]
@@ -149,6 +179,14 @@ class Grid:
         return copy, action
 
     def can_move(self, to):
+        """function that check if the '0' can swip position with the target position.
+
+        Args:
+            to (tuple): target position
+
+        Returns:
+            bool: True if the they can swip positions, False otherwise
+        """
         y, x = to
         return self.empty_coord in (
             (y, x-1),
@@ -158,6 +196,14 @@ class Grid:
         )
 
     def make_action(self, action):
+        """function that take an action (like 'DOWN_', 'UP___', 'RIGHT', 'LEFT_') and make a move (swip positions)
+
+        Args:
+            action (string): ('DOWN_', 'UP___', 'RIGHT', 'LEFT_')
+
+        Returns:
+            object: grid object
+        """
         y_empty, x_empty = self.empty_coord
         moves = {
             'R': (y_empty, x_empty+1),
@@ -168,27 +214,58 @@ class Grid:
         return self.make_move(action, moves[action])[0]
 
     def shuffle(self, moves_range=380):
-        puzzle = self
+        """function that shuffle a perfect grid
+
+        Args:
+            moves_range (int, optional): shuffle the grid for a given_number time. Defaults to 380.
+
+        Returns:
+            object: grid object
+        """
+        grid = self
         for _ in range(moves_range):
-            block_can_move = puzzle.moving_blocks()
-            puzzle = puzzle.make_move(
+            block_can_move = grid.moving_blocks()
+            grid = grid.make_move(
                 *choice(tuple(block_can_move.items())))[0]
-            # puzzle = self.make_move(*choice(tuple(block_can_move.items())))[0]
-        return puzzle
+            # grid = self.make_move(*choice(tuple(block_can_move.items())))[0]
+        return grid
 
     @property
     def solved(self):
+        """this function check if the grid is solved
+
+        Returns:
+            bool: True if the grid is perfect, False otherwise
+        """
         return str(self) == '123405678'
 
     def copy(self):
+        """function that return a deepcopy of a grid object
+
+        Returns:
+            object: grid object
+        """
         Grid.Grid_used += 1
         return deepcopy(self)
 
     def __str__(self):
+        """function that gives the state of the grid as a string var
+
+        Returns:
+            string: description of the grid as a string
+        """
         # EXP: '314205867'
         return ''.join(list(map(str, [j for sub in self.grid for j in sub])))
 
     def __eq__(self, other):
+        """magic function that check if two grids are identical
+
+        Args:
+            other (object): another grid object to check if they are identical
+
+        Returns:
+            bool: Treu if identical, False otherwise
+        """
         return str(self) == str(other)
 
 # #################################################################
@@ -198,6 +275,7 @@ class Node:
     """
     class represent a Node, which contain the grid class and other methods.
     """
+
     def __init__(self, grid, parent=None, action=None):
         self.grid = grid
         self.parent = parent
